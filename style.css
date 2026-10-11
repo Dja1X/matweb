@@ -191,17 +191,6 @@ svg { display: block; }
   font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem;
 }
 
-.nav__search {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; border-radius: var(--radius-sm);
-  color: var(--ink); background: transparent; border: 1px solid transparent;
-  cursor: pointer; transition: background 0.15s var(--ease), color 0.15s var(--ease), border-color 0.15s var(--ease);
-}
-.nav__search:hover { background: var(--paper-2); color: var(--chalk-deep); border-color: var(--line); }
-.nav__search[aria-expanded="true"] { background: var(--paper-2); color: var(--chalk-deep); border-color: var(--line); }
-.nav__search svg { width: 19px; height: 19px; }
-
-
 .theme-toggle {
   display: inline-flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: var(--radius-sm);
@@ -240,11 +229,6 @@ svg { display: block; }
   .nav__toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 }
 @media (min-width: 901px) { .nav__toggle { display: none !important; } }
-@media (max-width: 900px) {
-  
-  .nav__search { display: none; }
-}
-
 
 .mobile-nav, .mobile-nav__overlay { display: none; }
 
@@ -420,53 +404,6 @@ svg { display: block; }
 .section__title a:hover { color: var(--chalk-deep); text-decoration: underline; text-underline-offset: 4px; }
 
 
-.mobile-nav__search { margin-bottom: 20px; }
-.mobile-nav__search .search__input { background: var(--white); }
-.mobile-nav__search .search__results { margin-top: 10px; max-height: 40vh; overflow-y: auto; }
-
-
-.search-panel {
-  position: absolute; top: 100%; left: 0; right: 0;
-  background: var(--paper); border-bottom: 1px solid var(--line);
-  box-shadow: 0 18px 40px rgba(16,35,74,0.16);
-  padding: 18px 0 24px;
-  animation: panel-in var(--dur-2) var(--ease);
-}
-@keyframes panel-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: none; }
-}
-.search-panel__bar { display: flex; gap: 10px; }
-.search-panel .search__input { flex: 1; }
-.search-panel__close {
-  flex-shrink: 0; width: 48px; border: 2px solid var(--line); border-radius: var(--radius-md);
-  background: var(--white); color: var(--text-muted); cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
-}
-.search-panel__close:hover { border-color: var(--chalk-deep); color: var(--ink); }
-.search-panel .search__results { max-height: 55vh; overflow-y: auto; }
-.search__input {
-  width: 100%; padding: 14px 18px; font: inherit; font-size: 1.0625rem; color: var(--ink);
-  background: var(--white); border: 2px solid var(--line); border-radius: var(--radius-md);
-  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
-}
-.search__input:focus { outline: none; border-color: var(--chalk-deep); box-shadow: 0 0 0 3px rgba(47,93,148,0.15); }
-.search__input::placeholder { color: var(--text-muted); }
-.search__results { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
-.search__result {
-  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md);
-  padding: 14px 18px; display: flex; flex-direction: column; gap: 3px;
-}
-.search__result-type {
-  font-family: var(--font-mono); font-size: 0.6875rem; text-transform: uppercase;
-  letter-spacing: 0.07em; color: var(--chalk-deep);
-}
-.search__result a { font-weight: 600; color: var(--ink); text-decoration: none; }
-.search__result a:hover { text-decoration: underline; }
-.search__empty { color: var(--text-muted); font-size: 0.9375rem; }
-
-
 .vzkaz { padding: 40px 36px 34px; max-width: 780px; transform: rotate(-0.4deg); }
 .vzkaz__text { font-size: 1.125rem; line-height: 1.8; margin-bottom: 18px; }
 .vzkaz__podpis { font-family: var(--font-hand); font-size: 1.6rem; color: var(--chalk-deep); margin-bottom: 26px; }
@@ -614,7 +551,7 @@ a.archiv-link:hover { border-color: var(--chalk-deep); }
 
 @media print {
   .site-header, .site-footer, .hero, .page-hero, .mobile-nav, .mobile-nav__overlay,
-  .skip-link, .search-panel, .theme-toggle, .doodle, .btn { display: none !important; }
+  .skip-link, .theme-toggle, .doodle, .btn { display: none !important; }
   body { background: #fff; color: #000; }
   .section { padding: 16px 0; }
   .worksheet, .vzkaz, .assignment, .archiv-item, .card { box-shadow: none !important; transform: none !important; }

@@ -126,7 +126,18 @@
   function renderPageFotka() {
     if (!DATA.vzhled) return;
     var f = document.getElementById("page-fotka");
-    if (f && DATA.vzhled.strankyFotka) f.style.backgroundImage = "url('" + DATA.vzhled.strankyFotka + "')";
+    if (!f || !DATA.vzhled.strankyFotka) return;
+
+    var webp = DATA.vzhled.strankyFotka;
+    var avif = DATA.vzhled.strankyFotkaAvif;
+
+    f.style.backgroundImage = "url('" + webp + "')";
+
+    if (avif && typeof CSS !== "undefined" && CSS.supports &&
+        CSS.supports("background-image", "image-set(url('a') type('image/avif'))")) {
+      f.style.backgroundImage =
+        "image-set(url('" + avif + "') type('image/avif'), url('" + webp + "') type('image/webp'))";
+    }
   }
 
   
@@ -512,192 +523,6 @@
 
   
 
-  
-  function norm(s) {
-    return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-
-  
-  function initSearch() {
-    var toggle = document.getElementById("search-toggle");
-    var header = document.querySelector(".site-header");
-    if (!toggle || !header) return;
-
-    
-    var panel = el("div", "search-panel");
-    panel.id = "search-panel";
-    panel.hidden = true;
-
-    var wrap = el("div", "container");
-    var bar = el("div", "search-panel__bar");
-    var input = el("input");
-    input.type = "search";
-    input.className = "search__input";
-    input.setAttribute("placeholder", "Hledat příspěvky, série, články…");
-    input.setAttribute("aria-label", "Vyhledat na webu");
-    input.setAttribute("autocomplete", "off");
-    bar.appendChild(input);
-
-    var closeBtn = el("button", "search-panel__close");
-    closeBtn.type = "button";
-    closeBtn.setAttribute("aria-label", "Zavřít vyhledávání");
-    closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-    bar.appendChild(closeBtn);
-    wrap.appendChild(bar);
-
-    var results = el("div", "search__results");
-    results.id = "search-results";
-    results.hidden = true;
-    wrap.appendChild(results);
-    panel.appendChild(wrap);
-    header.appendChild(panel);
-
-    var open = false;
-
-    function closePanel() {
-      if (!open) return;
-      open = false;
-      panel.hidden = true;
-      toggle.setAttribute("aria-expanded", "false");
-      input.value = "";
-      results.hidden = true;
-      results.textContent = "";
-    }
-
-    function openPanel() {
-      open = true;
-      panel.hidden = false;
-      toggle.setAttribute("aria-expanded", "true");
-      input.focus();
-    }
-
-    toggle.addEventListener("click", function () {
-      if (open) closePanel();
-      else openPanel();
-    });
-    closeBtn.addEventListener("click", closePanel);
-    document.addEventListener("click", function (e) {
-      if (!open) return;
-      if (panel.contains(e.target) || toggle.contains(e.target)) return;
-      closePanel();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && open) closePanel();
-    });
-
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        var first = results.querySelector("a");
-        if (first) window.location.href = first.getAttribute("href");
-      }
-    });
-
-    
-    function slovoShoda(hay, qw) {
-      var parts = hay.split(/\s+/);
-      for (var j = 0; j < parts.length; j++) {
-        var w = parts[j];
-        if (w === qw) return true;
-        if (w.length >= 5 && qw.length >= 4 && w.slice(0, 5) === qw.slice(0, 5)) return true;
-      }
-      return false;
-    }
-
-    function hit(hay, q) {
-      var words = q.split(/\s+/).filter(Boolean);
-      for (var i = 0; i < words.length; i++) {
-        if (!slovoShoda(hay, words[i])) return false;
-      }
-      return true;
-    }
-
-    
-    function doSearch(input, results) {
-      var q = norm(input.value.trim());
-      if (q.length < 2) {
-        results.hidden = true;
-        results.textContent = "";
-        return;
-      }
-
-      var hits = [];
-
-      (DATA.aktuality || []).forEach(function (a, i) {
-        if (hit(norm(a.nadpis + " " + a.text), q)) {
-          hits.push({ type: "Příspěvek" + (a.datum ? " · " + a.datum : ""), label: a.nadpis, href: "/vsechny-prispevky/#post-" + i });
-        }
-      });
-
-      (DATA.archiv || []).forEach(function (rok) {
-        (rok.serie || []).forEach(function (s) {
-          if (hit(norm(s.nazev + " " + rok.rocnik), q)) {
-            hits.push({ type: "Archiv · " + rok.rocnik, label: s.nazev, href: "/archiv" });
-          }
-        });
-      });
-
-      (DATA.oNas || []).forEach(function (o) {
-        if (hit(norm(o.nadpis + " " + o.text), q)) {
-          hits.push({ type: "O soutěži", label: o.nadpis, href: "/o-soutezi" });
-        }
-      });
-
-
-      
-      if (q.indexOf("prispev") !== -1 || q.indexOf("vsechny") !== -1 || q.indexOf("posts") !== -1) {
-        hits.unshift({ type: "Stránka", label: "Všechny příspěvky", href: "/vsechny-prispevky" });
-      }
-
-      
-      if (q.indexOf("matesgympol") !== -1 || q.indexOf("gympolicka") !== -1 || q.indexOf("mates policka") !== -1 || q.indexOf("policka mates") !== -1) {
-        hits.unshift({ type: "Stránka", label: "O soutěži MATES", href: "/o-soutezi" });
-        hits.unshift({ type: "Stránka", label: "MATES – Úvod", href: "/" });
-      }
-
-      
-      if (q.indexOf("olympiad") !== -1 || q.indexOf("soutez") !== -1 || q.indexOf("matematik") !== -1 || q.indexOf("uloh") !== -1) {
-        if (!hits.length || (hits.length < 3 && hits[0].href !== "/")) {
-          hits.unshift({ type: "Stránka", label: "Aktuální zadání – MATES", href: "/aktualni-zadani" });
-        }
-      }
-
-      results.textContent = "";
-      results.hidden = false;
-
-      if (!hits.length) {
-        results.appendChild(el("p", "search__empty", "Nic jsme nenašli – zkuste jiné slovo."));
-        return;
-      }
-
-      hits.slice(0, 12).forEach(function (h) {
-        var item = el("div", "search__result");
-        item.appendChild(el("span", "search__result-type", h.type));
-        var a = el("a");
-        a.href = h.href;
-        a.textContent = h.label;
-        item.appendChild(a);
-        results.appendChild(item);
-      });
-    }
-
-    input.addEventListener("input", function () { doSearch(input, results); });
-
-    
-    var mobileInput = document.getElementById("mobile-search-input");
-    var mobileResults = document.getElementById("mobile-search-results");
-    if (mobileInput && mobileResults) {
-      mobileInput.addEventListener("input", function () { doSearch(mobileInput, mobileResults); });
-      mobileInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-          var first = mobileResults.querySelector("a");
-          if (first) window.location.href = first.getAttribute("href");
-        }
-      });
-    }
-  }
-
-  
-
   function initMenu() {
     var navToggle = document.querySelector(".nav__toggle");
     var mobileNav = document.getElementById("mobile-navigation");
@@ -764,7 +589,7 @@
 
   function main() {
     if (!DATA) {
-      showError("Nepodařilo se načíst obsah. Zkontroluj obsah.js — chybí čárka, uvozovka nebo závorka? (návod v NAVOD.md)");
+      showError("Nepodařilo se načíst obsah. Zkontroluj obsah.js — chybí čárka, uvozovka nebo závorka?");
       initMenu();
       return;
     }
@@ -778,10 +603,9 @@
       renderArchiv();
       renderONas();
       renderKontakt();
-      initSearch();
       initMenu();
     } catch (err) {
-      showError("Chyba při vykreslování: " + err.message + " (viz NAVOD.md)");
+      showError("Chyba při vykreslování: " + err.message);
       if (window.console) console.error(err);
     }
     

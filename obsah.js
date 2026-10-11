@@ -14,6 +14,7 @@ window.MATES = {
   vzhled: {
     heroFotka: "assets/images/back26-4.webp",
     strankyFotka: "assets/images/back26-5.webp",
+    strankyFotkaAvif: "assets/images/back26-5.avif",
     poznamka: "Řešení zasílejte do termínu! ;)"
   },
 
