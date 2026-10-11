@@ -29,29 +29,9 @@ window.MATES = {
 
   aktuality: [
     {
-      tag: "Výsledky",
-      datum: "15. 6. 2026",
-      nadpis: "Výsledková listina 2026",
-      text: "Kompletní výsledková listina ročníku 2025/2026 je ke stažení. Gratulujeme všem řešitelům!",
-      odkaz: "assets/pdf/2025-2026/vysledky.pdf",
-      odkazText: "Stáhnout výsledky"
-    },
-    {
       tag: "Novinka",
-      datum: "1. 9. 2025",
-      nadpis: "Spouštíme nový ročník 2025/2026!",
-      text: "Přihlašování není potřeba – stačí stáhnout zadání první série a zaslat řešení do uvedeného termínu. Kompletní výsledková listina ročníku 2025/2026 je ke stažení. Gratulujeme všem řešitelům!"
-    },
-    {
-      tag: "Novinka",
-      datum: "1. 9. 2025",
-      nadpis: "Spouštíme nový ročník 2025/2026!",
-      text: "Přihlašování není potřeba – stačí stáhnout zadání první série a zaslat řešení do uvedeného termínu."
-    },
-    {
-      tag: "Novinka",
-      datum: "1. 9. 2025",
-      nadpis: "Spouštíme nový ročník 2025/2026!",
+      datum: "11. 10. 2026",
+      nadpis: "Spouštíme nový ročník 2026/2027!",
       text: "Přihlašování není potřeba – stačí stáhnout zadání první série a zaslat řešení do uvedeného termínu."
     }
   ],
