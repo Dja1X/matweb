@@ -8,7 +8,7 @@ window.MATES = {
     telefon: "Tel. 731 073 582",
     skola: "Gymnázium Polička",
     adresa: "Nám. Republiky 101, 572 01 Polička",
-    rocnik: "2025/2026"
+    rocnik: "2026/2027"
   },
 
   vzhled: {
